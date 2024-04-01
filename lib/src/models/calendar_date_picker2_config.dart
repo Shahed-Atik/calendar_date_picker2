@@ -70,6 +70,7 @@ class CalendarDatePicker2Config {
     this.modePickerTextHandler,
     this.selectedRangeDayTextStyle,
     this.rangeBidirectional = false,
+    this.readOnlyMode = false,
     this.calendarViewScrollPhysics,
   })  : calendarType = calendarType ?? CalendarDatePicker2Type.single,
         firstDate = DateUtils.dateOnly(firstDate ?? DateTime(1970)),
@@ -167,6 +168,9 @@ class CalendarDatePicker2Config {
 
   /// Flag to disable mode picker and hide the mode toggle button icon
   final bool? disableModePicker;
+
+  /// Flag to disable pick the days
+  final bool readOnlyMode;
 
   /// Flag to centralize year and month text label in controls
   final bool? centerAlignModePicker;

@@ -370,6 +370,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildDefaultRangeDatePickerWithValue() {
     final config = CalendarDatePicker2Config(
+      readOnlyMode: true,
       calendarType: CalendarDatePicker2Type.range,
       selectedDayHighlightColor: Colors.teal[800],
       weekdayLabelTextStyle: const TextStyle(

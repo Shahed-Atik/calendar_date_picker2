@@ -300,7 +300,7 @@ class _CalendarViewState extends State<_CalendarView> {
       key: ValueKey<DateTime>(month),
       selectedDates: (widget.selectedDates..removeWhere((d) => d == null))
           .cast<DateTime>(),
-      onChanged: _handleDateSelected,
+      onChanged: widget.config.readOnlyMode ? (_) {} : _handleDateSelected,
       config: widget.config,
       displayedMonth: month,
     );
