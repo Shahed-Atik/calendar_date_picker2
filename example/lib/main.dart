@@ -912,9 +912,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildCalendarWithActionButtons() {
     final config = CalendarDatePicker2WithActionButtonsConfig(
-      calendarType: CalendarDatePicker2Type.range,
-      disableModePicker: true,
-    );
+        calendarType: CalendarDatePicker2Type.range,
+        disableModePicker: false,
+        readOnlyMode: true);
     return SizedBox(
       width: 375,
       child: Column(
