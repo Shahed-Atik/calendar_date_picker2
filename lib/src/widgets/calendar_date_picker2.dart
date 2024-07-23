@@ -45,6 +45,7 @@ class CalendarDatePicker2 extends StatefulWidget {
     this.displayedMonthDate,
     this.onDisplayedMonthChanged,
     Key? key,
+    this.selectedRangesDates = const [],
   }) : super(key: key) {
     const valid = true;
     const invalid = false;
@@ -66,6 +67,19 @@ class CalendarDatePicker2 extends StatefulWidget {
         isRangePickerValueValid,
         'Error: range date picker must has start date set before setting end date, and start date must before end date.',
       );
+      if (config.calendarType == CalendarDatePicker2Type.multiRange &&
+          value.length > 1) {
+        final isRangePickerValueValid = value[0] == null
+            ? (value[1] != null ? invalid : valid)
+            : (value[1] != null
+                ? (value[1]!.isBefore(value[0]!) ? invalid : valid)
+                : valid);
+
+        assert(
+          isRangePickerValueValid,
+          'Error: range date picker must has start date set before setting end date, and start date must before end date.',
+        );
+      }
     }
   }
 
@@ -74,6 +88,8 @@ class CalendarDatePicker2 extends StatefulWidget {
 
   /// The selected [DateTime]s that the picker should display.
   final List<DateTime?> value;
+
+  final List<(DateTime start, DateTime end)> selectedRangesDates;
 
   /// Called when the selected dates changed
   final ValueChanged<List<DateTime>>? onValueChanged;
@@ -109,7 +125,16 @@ class _CalendarDatePicker2State extends State<CalendarDatePicker2> {
             : DateUtils.dateOnly(DateTime.now()));
     _mode = config.calendarViewMode;
     _currentDisplayedMonthDate = DateTime(initialDate.year, initialDate.month);
-    _selectedDates = widget.value.toList();
+
+    if (widget.config.calendarType == CalendarDatePicker2Type.multiRange) {
+      _selectedDates = [];
+      for (var e in widget.selectedRangesDates) {
+        _selectedDates.add(e.$1);
+        _selectedDates.add(e.$2);
+      }
+    } else {
+      _selectedDates = widget.value.toList();
+    }
   }
 
   @override
@@ -126,7 +151,16 @@ class _CalendarDatePicker2State extends State<CalendarDatePicker2> {
       );
     }
 
-    _selectedDates = widget.value.toList();
+    //todo handle update value
+    if (widget.config.calendarType == CalendarDatePicker2Type.multiRange) {
+      _selectedDates = [];
+      for (var e in widget.selectedRangesDates) {
+        _selectedDates.add(e.$1);
+        _selectedDates.add(e.$2);
+      }
+    } else {
+      _selectedDates = widget.value.toList();
+    }
   }
 
   @override
@@ -290,6 +324,9 @@ class _CalendarDatePicker2State extends State<CalendarDatePicker2> {
           }
 
           break;
+        case CalendarDatePicker2Type.multiRange:
+          // TODO: Handle this case.
+          break;
       }
 
       selectedDates
@@ -316,6 +353,7 @@ class _CalendarDatePicker2State extends State<CalendarDatePicker2> {
           key: _dayPickerKey,
           initialMonth: _currentDisplayedMonthDate,
           selectedDates: _selectedDates,
+          selectedRangesDates: widget.selectedRangesDates,
           onChanged: _handleDayChanged,
           onDisplayedMonthChanged: _handleDisplayedMonthDateChanged,
         );
@@ -349,6 +387,7 @@ class _CalendarDatePicker2State extends State<CalendarDatePicker2> {
           child: _CalendarScrollView(
             config: widget.config,
             key: _dayPickerKey,
+            selectedRangesDates: widget.selectedRangesDates,
             initialMonth: _currentDisplayedMonthDate,
             selectedDates: _selectedDates,
             onChanged: _handleDayChanged,

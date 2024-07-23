@@ -10,6 +10,7 @@ class _CalendarScrollView extends StatefulWidget {
     required this.onChanged,
     required this.onDisplayedMonthChanged,
     Key? key,
+    required this.selectedRangesDates,
   }) : super(key: key);
 
   /// The calendar configurations
@@ -22,6 +23,7 @@ class _CalendarScrollView extends StatefulWidget {
   ///
   /// Selected dates are highlighted in the picker.
   final List<DateTime?> selectedDates;
+  final List<(DateTime start, DateTime end)> selectedRangesDates;
 
   /// Called when the user picks a day.
   final ValueChanged<DateTime> onChanged;
@@ -147,6 +149,7 @@ class _CalendarScrollViewState extends State<_CalendarScrollView> {
           child: _DayPicker(
             key: ValueKey<DateTime>(month),
             config: widget.config,
+            selectedRangesDates: widget.selectedRangesDates,
             selectedDates: widget.selectedDates.whereType<DateTime>().toList(),
             displayedMonth: month,
             onChanged: widget.onChanged,

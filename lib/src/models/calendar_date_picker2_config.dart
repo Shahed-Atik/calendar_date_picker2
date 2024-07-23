@@ -12,6 +12,9 @@ enum CalendarDatePicker2Type {
   ///
   /// See also [CalendarDatePicker2Config.rangeBidirectional].
   range,
+
+  /// Allows selecting a ranges of binary dates.
+  multiRange,
 }
 
 /// Custom enum for a date picker mode including day, month, and year.

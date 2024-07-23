@@ -92,23 +92,24 @@ class _MyHomePageState extends State<MyHomePage> {
             Wrap(
               alignment: WrapAlignment.center,
               children: <Widget>[
-                _buildCalendarDialogButton(),
-                _buildSingleDatePickerWithValue(),
-                _buildMultiDatePickerWithValue(),
-                _buildRangeDatePickerWithValue(),
-                _buildCalendarWithActionButtons(),
+                // _buildCalendarDialogButton(),
+                // _buildSingleDatePickerWithValue(),
+                // _buildMultiDatePickerWithValue(),
+                // _buildRangeDatePickerWithValue(),
+                // _buildCalendarWithActionButtons(),
+                _buildCalendarWithMultiRanges()
               ],
             ),
-            Wrap(
-              alignment: WrapAlignment.center,
-              children: <Widget>[
-                _buildScrollCalendarDialogButton(),
-                _buildScrollSingleDatePickerWithValue(),
-                _buildScrollMultiDatePickerWithValue(),
-                _buildScrollRangeDatePickerWithValue(),
-                _buildScrollCalendarWithActionButtons(),
-              ],
-            ),
+            // Wrap(
+            //   alignment: WrapAlignment.center,
+            //   children: <Widget>[
+            //     _buildScrollCalendarDialogButton(),
+            //     _buildScrollSingleDatePickerWithValue(),
+            //     _buildScrollMultiDatePickerWithValue(),
+            //     _buildScrollRangeDatePickerWithValue(),
+            //     _buildScrollCalendarWithActionButtons(),
+            //   ],
+            // ),
           ],
         ),
       ),
@@ -943,6 +944,35 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 25),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCalendarWithMultiRanges() {
+    final config = CalendarDatePicker2Config(
+        calendarType: CalendarDatePicker2Type.multiRange,
+        disableModePicker: false,
+        readOnlyMode: true);
+    return SizedBox(
+      width: 375,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 10),
+          const Text('Date Picker With Multi Range'),
+          CalendarDatePicker2(
+            config: config,
+            selectedRangesDates: [
+              (DateTime(2024, 7, 1), DateTime(2024, 7, 4)),
+              (DateTime(2024, 7, 7), DateTime(2024, 7, 9)),
+              (DateTime(2024, 7, 11), DateTime(2024, 7, 18)),
+              (DateTime(2024, 7, 30), DateTime(2024, 8, 1))
+            ],
+            value: const [],
+            onValueChanged: (dates) {},
           ),
           const SizedBox(height: 25),
         ],

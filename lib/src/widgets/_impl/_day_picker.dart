@@ -13,6 +13,7 @@ class _DayPicker extends StatefulWidget {
     required this.onChanged,
     required this.dayRowsCount,
     Key? key,
+    required this.selectedRangesDates,
   }) : super(key: key);
 
   /// The calendar configurations
@@ -22,6 +23,8 @@ class _DayPicker extends StatefulWidget {
   ///
   /// Selected dates are highlighted in the picker.
   final List<DateTime> selectedDates;
+
+  final List<(DateTime start, DateTime end)> selectedRangesDates;
 
   /// Called when the user picks a day.
   final ValueChanged<DateTime> onChanged;
@@ -224,6 +227,24 @@ class _DayPickerState extends State<_DayPicker> {
                   !DateUtils.isSameDay(startDate, endDate);
         }
 
+        final isMultiSelectedRangePicker =
+            widget.config.calendarType == CalendarDatePicker2Type.multiRange &&
+                widget.selectedRangesDates.isNotEmpty;
+        (DateTime, DateTime)? currentRange;
+        if (isMultiSelectedRangePicker) {
+          currentRange = widget.selectedRangesDates.first;
+          for (var element in widget.selectedRangesDates) {
+            currentRange = element;
+            final startDate = DateUtils.dateOnly(element.$1);
+            final endDate = DateUtils.dateOnly(element.$2);
+            isDateInBetweenRangePickerSelectedDates =
+                !(dayToBuild.isBefore(startDate) ||
+                        dayToBuild.isAfter(endDate)) &&
+                    !DateUtils.isSameDay(startDate, endDate);
+            if (isDateInBetweenRangePickerSelectedDates) break;
+          }
+        }
+
         if (isDateInBetweenRangePickerSelectedDates &&
             widget.config.selectedRangeDayTextStyle != null) {
           customDayTextStyle = widget.config.selectedRangeDayTextStyle;
@@ -259,10 +280,21 @@ class _DayPickerState extends State<_DayPicker> {
                     .withOpacity(0.15),
           );
 
-          if (DateUtils.isSameDay(
-            DateUtils.dateOnly(widget.selectedDates[0]),
-            dayToBuild,
-          )) {
+          bool sameStartDay =
+              widget.config.calendarType == CalendarDatePicker2Type.multiRange
+                  ? DateUtils.isSameDay(
+                      DateUtils.dateOnly(currentRange!.$1), dayToBuild)
+                  : DateUtils.isSameDay(
+                      DateUtils.dateOnly(widget.selectedDates[0]), dayToBuild);
+
+          bool sameEndDay =
+              widget.config.calendarType == CalendarDatePicker2Type.multiRange
+                  ? DateUtils.isSameDay(
+                      DateUtils.dateOnly(currentRange!.$2), dayToBuild)
+                  : DateUtils.isSameDay(
+                      DateUtils.dateOnly(widget.selectedDates[1]), dayToBuild);
+
+          if (sameStartDay) {
             dayWidget = Stack(
               children: [
                 Row(children: [
@@ -276,10 +308,7 @@ class _DayPickerState extends State<_DayPicker> {
                 dayWidget,
               ],
             );
-          } else if (DateUtils.isSameDay(
-            DateUtils.dateOnly(widget.selectedDates[1]),
-            dayToBuild,
-          )) {
+          } else if (sameEndDay) {
             dayWidget = Stack(
               children: [
                 Row(children: [

@@ -11,6 +11,7 @@ class _CalendarView extends StatefulWidget {
     required this.onChanged,
     required this.onDisplayedMonthChanged,
     Key? key,
+    required this.selectedRangesDates,
   }) : super(key: key);
 
   /// The calendar configurations
@@ -23,6 +24,11 @@ class _CalendarView extends StatefulWidget {
   ///
   /// Selected dates are highlighted in the picker.
   final List<DateTime?> selectedDates;
+
+  /// The currently selected dates in multiple ranges
+  ///
+  /// Selected dates are highlighted in the picker.
+  final List<(DateTime start, DateTime end)> selectedRangesDates;
 
   /// Called when the user picks a day.
   final ValueChanged<DateTime> onChanged;
@@ -299,6 +305,7 @@ class _CalendarViewState extends State<_CalendarView> {
     final DateTime month =
         DateUtils.addMonthsToMonthDate(widget.config.firstDate, index);
     return _DayPicker(
+      selectedRangesDates: widget.selectedRangesDates,
       key: ValueKey<DateTime>(month),
       selectedDates: widget.selectedDates.whereType<DateTime>().toList(),
       onChanged: widget.config.readOnlyMode ? (_) {} : _handleDateSelected,
